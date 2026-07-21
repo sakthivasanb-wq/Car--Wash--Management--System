@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>✏️ Edit Customer (Membership)</h3>
+<hr>
+
+<div class="card p-4 shadow-sm">
+  <form method="POST" class="row g-2">
+    <div class="col-md-3">
+      <label class="form-label">Name</label>
+      <input class="form-control" name="name" value="{{customer.name}}" required>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Phone</label>
+      <input class="form-control" name="phone" value="{{customer.phone}}" required>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Car Number</label>
+      <input class="form-control" name="car_number" value="{{customer.car_number}}" required>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Membership</label>
+      <select class="form-control" name="plan_id">
+        <option value="0">No Membership</option>
+        {% for p in plans %}
+          <option value="{{p.id}}" {% if active_mem and active_mem.plan_id==p.id %}selected{% endif %}>
+            {{p.plan_name}} ({{p.discount_percent}}% off)
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-12 mt-2">
+      <button class="btn btn-success w-100">Update</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

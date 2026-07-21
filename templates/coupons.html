@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>🏷️ Coupons</h3>
+<hr>
+
+<div class="card p-3 shadow-sm mb-4">
+  <h5 class="mb-3">➕ Add / Update Coupon</h5>
+  <form method="POST" class="row g-2">
+    <div class="col-md-4"><input class="form-control" name="code" placeholder="CODE (FESTIVE10)" required></div>
+    <div class="col-md-4">
+      <select class="form-control" name="discount_type" required>
+        <option value="PERCENT">PERCENT</option>
+        <option value="FLAT">FLAT</option>
+      </select>
+    </div>
+    <div class="col-md-4"><input class="form-control" type="number" name="discount_value" placeholder="Value (10 or 50)" required></div>
+    <div class="col-12"><button class="btn btn-dark w-100">Save Coupon</button></div>
+  </form>
+</div>
+
+<div class="card p-3 shadow-sm">
+  <h5 class="mb-3">📋 Coupon List</h5>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead class="table-dark">
+        <tr><th>ID</th><th>Code</th><th>Type</th><th>Value</th><th>Active</th><th>Toggle</th></tr>
+      </thead>
+      <tbody>
+        {% for c in coupons %}
+        <tr>
+          <td>{{c.id}}</td>
+          <td><b>{{c.code}}</b></td>
+          <td>{{c.discount_type}}</td>
+          <td>{{c.discount_value}}</td>
+          <td>
+            {% if c.active == 1 %}
+              <span class="badge bg-success">ON</span>
+            {% else %}
+              <span class="badge bg-danger">OFF</span>
+            {% endif %}
+          </td>
+          <td><a class="btn btn-sm btn-outline-primary" href="/coupons/toggle/{{c.id}}">Toggle</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

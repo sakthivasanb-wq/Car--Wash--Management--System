@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>📅 Bookings (Time Slot + Staff + Queue)</h3>
+<hr>
+
+<div class="card p-3 shadow-sm mb-4">
+  <h5 class="mb-3">➕ Create Booking</h5>
+
+  <form method="POST" class="row g-2">
+    <div class="col-md-3">
+      <label class="form-label">Customer</label>
+      <select class="form-control" name="customer_id" required>
+        <option value="">-- Select Customer --</option>
+        {% for c in customers %}
+          <option value="{{c.id}}">{{ c.name }} ({{c.car_number}})</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label">Service</label>
+      <select class="form-control" name="service_id" required>
+        <option value="">-- Select Service --</option>
+        {% for s in services %}
+          <option value="{{s.id}}">{{ s.service_name }} - ₹{{s.price}} ({{s.category}})</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label">Wash Date</label>
+      <input class="form-control" type="date" name="wash_date" required>
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label">Time Slot</label>
+      <select class="form-control" name="time_slot" required>
+        {% for t in time_slots %}
+          <option value="{{t}}">{{t}}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label">Assign Staff</label>
+      <select class="form-control" name="staff_id">
+        <option value="">-- Optional --</option>
+        {% for s in staff %}
+          <option value="{{s.id}}">{{s.staff_name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-12">
+      <button class="btn btn-dark w-100">Create Booking</button>
+    </div>
+  </form>
+</div>
+
+<div class="card p-3 shadow-sm">
+  <h5 class="mb-3">📋 Booking List</h5>
+
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th><th>Queue</th><th>Customer</th><th>Car</th><th>Service</th>
+          <th>Date</th><th>Slot</th><th>Staff</th><th>Status</th><th>Update</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in bookings %}
+        <tr>
+          <td>{{ b.id }}</td>
+          <td><span class="badge bg-info text-dark">{{ b.queue_no or "-" }}</span></td>
+          <td>{{ b.customer_name }}</td>
+          <td><span class="badge bg-secondary">{{ b.car_number }}</span></td>
+          <td>{{ b.service_name }} (₹{{ b.price }})</td>
+          <td>{{ b.wash_date }}</td>
+          <td>{{ b.time_slot or "-" }}</td>
+          <td>{{ b.staff_name or "-" }}</td>
+
+          <td>
+            {% if b.status == "Pending" %}
+              <span class="badge bg-warning text-dark">{{ b.status }}</span>
+            {% elif b.status == "Completed" %}
+              <span class="badge bg-success">{{ b.status }}</span>
+            {% else %}
+              <span class="badge bg-danger">{{ b.status }}</span>
+            {% endif %}
+          </td>
+
+          <td>
+            <a class="btn btn-sm btn-success" href="/bookings/status/{{b.id}}/Completed">Complete</a>
+            <a class="btn btn-sm btn-danger" href="/bookings/status/{{b.id}}/Cancelled">Cancel</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

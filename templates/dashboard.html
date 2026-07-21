@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>📊 Dashboard</h3>
+<hr>
+
+<div class="row">
+  <div class="col-md-3">
+    <div class="card bg-primary text-white mb-3 shadow-sm">
+      <div class="card-body text-center">
+        <h5>Customers</h5>
+        <h2>{{ total_customers }}</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card bg-success text-white mb-3 shadow-sm">
+      <div class="card-body text-center">
+        <h5>Bookings</h5>
+        <h2>{{ total_bookings }}</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card bg-warning text-dark mb-3 shadow-sm">
+      <div class="card-body text-center">
+        <h5>Pending</h5>
+        <h2>{{ pending_bookings }}</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card bg-dark text-white mb-3 shadow-sm">
+      <div class="card-body text-center">
+        <h5>Revenue</h5>
+        <h2>₹ {{ revenue }}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card p-3 shadow-sm">
+  <h5 class="mb-2">🕒 Recent Bookings</h5>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th><th>Queue</th><th>Customer</th><th>Car</th><th>Service</th><th>Date</th><th>Slot</th><th>Staff</th><th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in recent %}
+        <tr>
+          <td>{{ b.id }}</td>
+          <td><span class="badge bg-info text-dark">{{ b.queue_no or "-" }}</span></td>
+          <td>{{ b.customer_name }}</td>
+          <td><span class="badge bg-secondary">{{ b.car_number }}</span></td>
+          <td>{{ b.service_name }}</td>
+          <td>{{ b.wash_date }}</td>
+          <td>{{ b.time_slot or "-" }}</td>
+          <td>{{ b.staff_name or "-" }}</td>
+          <td>
+            {% if b.status == "Pending" %}
+              <span class="badge bg-warning text-dark">{{ b.status }}</span>
+            {% elif b.status == "Completed" %}
+              <span class="badge bg-success">{{ b.status }}</span>
+            {% else %}
+              <span class="badge bg-danger">{{ b.status }}</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>🧑‍🔧 Staff</h3>
+<hr>
+
+<div class="card p-3 shadow-sm mb-4">
+  <h5 class="mb-3">➕ Add Staff</h5>
+  <form method="POST" class="row g-2">
+    <div class="col-md-6">
+      <input class="form-control" name="staff_name" placeholder="Staff Name" required>
+    </div>
+    <div class="col-md-6">
+      <input class="form-control" name="phone" placeholder="Phone" required>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-dark w-100">Add Staff</button>
+    </div>
+  </form>
+</div>
+
+<div class="card p-3 shadow-sm">
+  <h5 class="mb-3">📋 Staff List</h5>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead class="table-dark">
+        <tr><th>ID</th><th>Name</th><th>Phone</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        {% for s in staff %}
+        <tr>
+          <td>{{s.id}}</td>
+          <td>{{s.staff_name}}</td>
+          <td>{{s.phone}}</td>
+          <td>
+            <a class="btn btn-sm btn-danger" href="/staff/delete/{{s.id}}" onclick="return confirm('Delete staff?')">Delete</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

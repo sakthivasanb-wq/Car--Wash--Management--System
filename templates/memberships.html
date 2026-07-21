@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>💎 Membership Plans</h3>
+<hr>
+
+<div class="card p-3 shadow-sm mb-4">
+  <h5 class="mb-3">➕ Add Plan</h5>
+  <form method="POST" class="row g-2">
+    <div class="col-md-3"><input class="form-control" name="plan_name" placeholder="Plan Name" required></div>
+    <div class="col-md-3"><input class="form-control" type="number" name="monthly_fee" placeholder="Monthly Fee" required></div>
+    <div class="col-md-3"><input class="form-control" type="number" name="washes_per_month" placeholder="Washes/Month" required></div>
+    <div class="col-md-3"><input class="form-control" type="number" name="discount_percent" placeholder="Discount %" required></div>
+    <div class="col-12"><button class="btn btn-dark w-100">Add Plan</button></div>
+  </form>
+</div>
+
+<div class="card p-3 shadow-sm">
+  <h5 class="mb-3">📋 Plans</h5>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead class="table-dark">
+        <tr><th>ID</th><th>Name</th><th>Fee</th><th>Washes</th><th>Discount</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        {% for p in plans %}
+        <tr>
+          <td>{{p.id}}</td>
+          <td>{{p.plan_name}}</td>
+          <td>₹{{p.monthly_fee}}</td>
+          <td>{{p.washes_per_month}}</td>
+          <td>{{p.discount_percent}}%</td>
+          <td><a class="btn btn-sm btn-danger" href="/memberships/delete/{{p.id}}" onclick="return confirm('Delete plan?')">Delete</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

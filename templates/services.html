@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>🧼 Services (Category)</h3>
+<hr>
+
+<div class="card p-3 shadow-sm mb-4">
+  <h5 class="mb-3">➕ Add Service</h5>
+
+  <form method="POST" class="row g-2">
+    <div class="col-md-6">
+      <input class="form-control" name="service_name" placeholder="Service Name (Interior Cleaning)" required>
+    </div>
+    <div class="col-md-2">
+      <input class="form-control" name="price" type="number" placeholder="Price (₹)" required>
+    </div>
+    <div class="col-md-4">
+      <select class="form-control" name="category" required>
+        <option value="Basic">Basic</option>
+        <option value="Premium">Premium</option>
+        <option value="Detailing">Detailing</option>
+      </select>
+    </div>
+
+    <div class="col-12">
+      <button class="btn btn-dark w-100">Add Service</button>
+    </div>
+  </form>
+</div>
+
+<div class="card p-3 shadow-sm">
+  <h5 class="mb-2">📋 Service List</h5>
+
+  <input id="searchInput" class="form-control mb-3" placeholder="Search services...">
+
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th><th>Service</th><th>Category</th><th>Price</th><th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in services %}
+        <tr>
+          <td>{{ s.id }}</td>
+          <td>{{ s.service_name }}</td>
+          <td><span class="badge bg-info text-dark">{{ s.category }}</span></td>
+          <td><b>₹ {{ s.price }}</b></td>
+          <td>
+            <a class="btn btn-sm btn-primary" href="/services/edit/{{s.id}}">Edit</a>
+            <a class="btn btn-sm btn-danger" href="/services/delete/{{s.id}}" onclick="return confirm('Delete this service?')">Delete</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  const searchInput = document.getElementById("searchInput");
+  searchInput.addEventListener("keyup", function () {
+    const value = this.value.toLowerCase();
+    const rows = document.querySelectorAll("tbody tr");
+    rows.forEach(row => {
+      row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+    });
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>👤 Customers (Membership + Points)</h3>
+<hr>
+
+<div class="card p-3 shadow-sm mb-4">
+  <h5 class="mb-3">➕ Add Customer</h5>
+
+  <form method="POST" class="row g-2">
+    <div class="col-md-3">
+      <input class="form-control" name="name" placeholder="Customer Name" required>
+    </div>
+    <div class="col-md-3">
+      <input class="form-control" name="phone" placeholder="Phone Number" required>
+    </div>
+    <div class="col-md-3">
+      <input class="form-control" name="car_number" placeholder="Car Number (TN-xx-xxxx)" required>
+    </div>
+    <div class="col-md-3">
+      <select class="form-control" name="plan_id">
+        <option value="0">No Membership</option>
+        {% for p in plans %}
+          <option value="{{p.id}}">{{p.plan_name}} ({{p.discount_percent}}% off)</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-dark w-100">Add Customer</button>
+    </div>
+  </form>
+</div>
+
+<div class="card p-3 shadow-sm">
+  <h5 class="mb-2">📋 Customer List</h5>
+
+  <input id="searchInput" class="form-control mb-3" placeholder="Search customer name / car number...">
+
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th><th>Name</th><th>Phone</th><th>Car</th><th>Membership</th><th>Points</th><th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in customers %}
+        <tr>
+          <td>{{ c.id }}</td>
+          <td>{{ c.name }}</td>
+          <td>{{ c.phone }}</td>
+          <td><span class="badge bg-secondary">{{ c.car_number }}</span></td>
+          <td>{{ c.plan_name or "-" }}</td>
+          <td><b>{{ c.points or 0 }}</b></td>
+          <td>
+            <a class="btn btn-sm btn-primary" href="/customers/edit/{{c.id}}">Edit</a>
+            <a class="btn btn-sm btn-danger" href="/customers/delete/{{c.id}}" onclick="return confirm('Delete this customer?')">Delete</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  const searchInput = document.getElementById("searchInput");
+  searchInput.addEventListener("keyup", function () {
+    const value = this.value.toLowerCase();
+    const rows = document.querySelectorAll("tbody tr");
+    rows.forEach(row => {
+      row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+    });
+  });
+</script>
+
+{% endblock %}

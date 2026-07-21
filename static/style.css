@@ -1,0 +1,8 @@
+body{
+  background:#f6f7fb;
+  font-family: "Segoe UI", sans-serif;
+}
+.card{ border-radius: 14px; }
+table{ border-radius: 14px; overflow:hidden; }
+.btn{ border-radius: 10px; }
+.navbar-brand{ letter-spacing:.3px; }

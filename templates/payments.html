@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>💰 Payments (Auto Amount + Coupon + Points + Invoice PDF)</h3>
+<hr>
+
+<div class="card p-3 shadow-sm mb-4">
+  <h5 class="mb-3">➕ Add Payment</h5>
+
+  <form method="POST" class="row g-2">
+    <div class="col-md-6">
+      <label class="form-label">Booking</label>
+      <select class="form-control" name="booking_id" id="bookingSelect" required>
+        <option value="">-- Select Booking --</option>
+        {% for b in bookings %}
+          <option value="{{b.booking_id}}" data-price="{{b.price}}">
+            #{{b.booking_id}} - {{b.customer_name}} ({{b.car_number}}) - {{b.service_name}} - ₹{{b.price}} [{{b.status}}]
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label">Amount (Auto)</label>
+      <input class="form-control" name="amount" id="amountInput" type="number" placeholder="₹" required>
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label">Mode</label>
+      <select class="form-control" name="payment_mode" required>
+        <option value="Cash">Cash</option>
+        <option value="UPI">UPI</option>
+        <option value="Card">Card</option>
+      </select>
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Coupon Code (optional)</label>
+      <input class="form-control" name="coupon_code" placeholder="FESTIVE10 / SAVE50">
+      <small class="text-muted">Coupon + Membership discount auto apply aagum.</small>
+    </div>
+
+    <div class="col-12">
+      <button class="btn btn-dark w-100">Add Payment</button>
+    </div>
+  </form>
+</div>
+
+<div class="card p-3 shadow-sm">
+  <h5 class="mb-3">📋 Payment History</h5>
+
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th><th>Booking</th><th>Customer</th><th>Service</th>
+          <th>Base</th><th>Discount</th><th>Final</th><th>Points</th><th>Invoice</th><th>Paid At</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in payments %}
+        <tr>
+          <td>{{ p.id }}</td>
+          <td>#{{ p.booking_id }}</td>
+          <td>{{ p.customer_name }}</td>
+          <td>{{ p.service_name }}</td>
+          <td>₹{{ p.amount }}</td>
+          <td>₹{{ p.discount }}</td>
+          <td><b>₹{{ p.final_amount }}</b></td>
+          <td>+{{ p.points_added }}</td>
+          <td><a class="btn btn-sm btn-outline-primary" href="/invoice/{{p.id}}">PDF</a></td>
+          <td>{{ p.paid_at }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  const bookingSelect = document.getElementById("bookingSelect");
+  const amountInput = document.getElementById("amountInput");
+
+  bookingSelect.addEventListener("change", function(){
+    const opt = this.options[this.selectedIndex];
+    const price = opt.getAttribute("data-price");
+    if(price) amountInput.value = price;
+  });
+</script>
+
+{% endblock %}
