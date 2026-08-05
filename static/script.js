@@ -1,0 +1,1 @@
+console.log("Car Wash Management System Loaded");
